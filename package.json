@@ -1,0 +1,17 @@
+{
+  "name": "fantano-spotify",
+  "version": "1.0.0",
+  "description": "Crete spotify playlist out of anthony fantanos weekly roundup youtube playlist",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Felipe Trost",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "got": "^11.5.2",
+    "spotify-web-api-node": "^4.0.0"
+  }
+}
