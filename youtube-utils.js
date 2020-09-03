@@ -31,4 +31,29 @@ const fetchVideos = async uid => {
     return videos
 }
 
+// Get songs from description
+const extractSongs = video => {
+    const videoDescription = video.snippet.description;
+    const segment = videoDescription.toLowerCase().match(/!!(fav|best).*\n[\s\S]*meh/);
+
+    if(!segment) return []
+
+    const songTitles = []
+    const songMatches = segment[0].match(/.*\nhttp/g) 
+    
+    for(const match of songMatches)
+        songTitles.push(match.substr(0, match.length - 5))
+    
+    return songTitles
+}
+
+// extract description from video list
+const extractSongsFromList = list => {
+    const songs = [];
+    for(let video of list)
+        songs.push(...extractSongs(video))
+    
+    return songs
+}
+
 module.exports = {fetchVideos, extractSongs, extractSongsFromList}
