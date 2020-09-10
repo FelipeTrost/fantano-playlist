@@ -1,24 +1,26 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const config = require('./config');
 const cors = require('cors');
+const updateDB = require("./update_db");
 const {
 	promp_request
 } = require('./spotify');
 var SpotifyWebApi = require('spotify-web-api-node');
 
-
-const {
-	fetchVideos,
-	extractSongsFromList
-} = require('./youtube-utils');
-
-const YTplaylistId = "PLP4CSgl7K7or84AAhr7zlLNpghEnKWu2c";
 const targetPlaylistName = "Fantano weekly roundup";
 
-(async () => {
-	const videos = await fetchVideos(YTplaylistId);
-	const songs = extractSongsFromList(videos)
-	console.log(songs.splice(0, 20))
-})()
+// -------------------------------
+// Connect to mongodb
+mongoose.connect(config.mongoose_db, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true
+});
+
+// -------------------------------
+// Update DB periodically
+updateDB() // run on start
+setTimeout(updateDB, 1000 * 60 * 60 * 24) //run once per day
 
 // -------------------------------
 // Setup express
