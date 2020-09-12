@@ -4,7 +4,7 @@
   "description": "Crete spotify playlist out of anthony fantanos weekly roundup youtube playlist",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "Felipe Trost",
   "license": "ISC",
@@ -12,6 +12,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "got": "^11.5.2",
+    "mongoose": "^5.10.8",
     "spotify-web-api-node": "^4.0.0"
   }
 }
