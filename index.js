@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const config = require('./config');
 const cors = require('cors');
 const updateDB = require("./update_db");
+const Track = require("./track_model");
 const {
 	promp_request
 } = require('./spotify');
@@ -67,8 +68,16 @@ app.get('/spotify', async (req, res) => {
 			targetPlaylistId = playlist.body.id
 		}
 
-		//This songs are only for testing purposes
-		await spotifyApi.addTracksToPlaylist(targetPlaylistId, ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "spotify:track:1301WleyT98MSxVHPZCA6M"]);
+		const fantanoTracks = await Track.find({
+			spotify: true
+		})
+
+		const fantanoTracksUris = fantanoTracks.map(track => "spotify:track:" + track.spotify_id)
+
+		//We can only put 100 songs at a time
+		for (let i = 0; i < Math.ceil(fantanoTracksUris.length / 100); i++) {
+			await spotifyApi.addTracksToPlaylist(targetPlaylistId, Array(...fantanoTracksUris).splice(0, 100));
+		}
 	} catch (error) {
 		console.log(error);
 		success = false;
