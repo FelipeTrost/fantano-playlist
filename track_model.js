@@ -7,6 +7,10 @@ const trackSchema = mongoose.Schema({
     },
     spotify_id: {
         type: String,
+    },
+    spotify: {
+        type: Boolean,
+        default: false
     }
 });
 
