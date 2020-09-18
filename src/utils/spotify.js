@@ -1,11 +1,11 @@
-const client_id = require("./config").spotify_client_id;
+const config = require("../config");
 
 const promp_request = () => {
     const params = {
-        client_id,
+        client_id: config.spotify_client_id,
+        redirect_uri: config.spotify_redirect_url,
         response_type: "token",
-        redirect_uri: "http://localhost:5000/spotify",
-        scope: "playlist-modify-private"
+        scope: "playlist-modify-private playlist-modify-public"
     }
 
     const urlParams = new URLSearchParams(params).toString();
@@ -13,6 +13,8 @@ const promp_request = () => {
     return `https://accounts.spotify.com/authorize?${urlParams}`;
 }
 
-module.exports = {promp_request};
+module.exports = {
+    promp_request
+};
 
 console.log(promp_request())

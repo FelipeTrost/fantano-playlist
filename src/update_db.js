@@ -4,10 +4,10 @@ const config = require("./config");
 const {
     fetchVideos,
     extractSongsFromList
-} = require('./youtube-utils');
+} = require('./utils/youtube-utils');
 
 const YTplaylistId = "PLP4CSgl7K7or84AAhr7zlLNpghEnKWu2c";
-const Track = require("./track_model");
+const Track = require("./models/track_model");
 
 const spotifyApi = new SpotifyWebApi({
     clientId: config.spotify_client_id,
