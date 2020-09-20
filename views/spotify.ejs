@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify</title>
+</head>
+
+<body>
+    <h1 id="status">Failed, please try againn</h1>
+    <button id="button" disabled>Create and add playlist</button>
+    <script>
+        const statusHeader = document.getElementById("status");
+        const button = document.getElementById("button");
+
+        const token = window.location.hash.substr(1).split('&')[0].split('=')[1];
+
+        if (token) {
+            statusHeader.innerText = "Success";
+            button.disabled = false;
+        }
+
+        button.onclick = () => {
+            fetch(`/create_playlist?token=${token}`)
+                .then(response => response.json())
+                .then(response => {
+                    if (response.success)
+                        alert("everything alright")
+                    else
+                        alert("an error ocurred")
+                })
+                .catch(err => alert("an error ocurred"));
+        }
+    </script>
+</body>
+
+</html>

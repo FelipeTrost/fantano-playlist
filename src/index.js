@@ -21,6 +21,7 @@ setTimeout(updateDB, 1000 * 60 * 60 * 24) //run once per day
 // Setup express
 const app = express();
 
+app.set('view engine', 'ejs');
 app.use(cors());
 app.use(express.json());
 
@@ -30,9 +31,7 @@ app.use(express.json());
 app.use("/", router);
 
 app.get('/', (_, res) => {
-	res.json({
-		message: '🌈✨Hi from fantano generator✨🌈'
-	});
+	res.render("index.ejs");
 });
 
 // -------------------------------

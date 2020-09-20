@@ -10,11 +10,16 @@ var SpotifyWebApi = require('spotify-web-api-node');
 const targetPlaylistName = "Fantano weekly roundup";
 
 router.get('/start', (_, res) => {
-    res.end(`<a href="${promp_request()}">Start</a>`);
+    res.render("start.ejs", {
+        link: promp_request()
+    });
 });
 
 router.get('/spotify', async (req, res) => {
-    let success = true;
+    res.render("spotify.ejs")
+});
+
+router.get('/create_playlist', async (req, res) => {
     try {
         const token = req.query.token;
 
@@ -49,16 +54,15 @@ router.get('/spotify', async (req, res) => {
         for (let i = 0; i < Math.ceil(fantanoTracksUris.length / 100); i++) {
             await spotifyApi.addTracksToPlaylist(targetPlaylistId, Array(...fantanoTracksUris).splice(0, 100));
         }
+        res.json({
+            success: true
+        })
     } catch (error) {
         console.log(error);
-        success = false;
+        res.json({
+            success: false
+        })
     }
-
-    //The js code is to put the token in the GET parameters, before that you couldn't access the token (Because it was ment for frontend)
-    res.end(
-        "<script> const token = window.location.hash.substr(1).split('&')[0].split('=')[1]; if(token) window.location.href= window.location.origin + '/spotify?token=' + token </script>" +
-        (success ? "<h1>Success</h1>" : "<h1>Failure</h1>")
-    );
-});
+})
 
 module.exports = router;
