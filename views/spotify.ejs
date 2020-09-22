@@ -10,7 +10,9 @@
 <body>
     <h1 id="status">Failed, please try againn</h1>
     <button id="button" disabled>Create and add playlist</button>
+    <br>
     <script>
+        const body = document.querySelector("body");
         const statusHeader = document.getElementById("status");
         const button = document.getElementById("button");
 
@@ -25,12 +27,20 @@
             fetch(`/create_playlist?token=${token}`)
                 .then(response => response.json())
                 .then(response => {
-                    if (response.success)
-                        alert("everything alright")
-                    else
+                    if (response.success) {
+                        alert("everything alright");
+                        button.disabled = true;
+
+                        // Return home link
+                        const returnHomeLink = document.createElement('a');
+                        returnHomeLink.innerText = "Playlist";
+                        returnHomeLink.href = response.targetPlaylistUrl;
+
+                        body.appendChild(returnHomeLink)
+                    } else
                         alert("an error ocurred")
                 })
-                .catch(err => alert("an error ocurred"));
+                .catch(err => console.log("an error ocurred", err));
         }
     </script>
 </body>
