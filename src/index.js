@@ -30,10 +30,6 @@ app.use(express.json());
 
 app.use("/", router);
 
-app.get('/', (_, res) => {
-	res.render("index.ejs");
-});
-
 // -------------------------------
 // Run server
 

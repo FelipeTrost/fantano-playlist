@@ -9,8 +9,8 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 const targetPlaylistName = "Fantano weekly roundup";
 
-router.get('/start', (_, res) => {
-    res.render("start.ejs", {
+router.get('/', (_, res) => {
+    res.render("index.ejs", {
         link: promp_request()
     });
 });
