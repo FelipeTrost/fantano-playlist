@@ -5,42 +5,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spotify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@200&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: antiquewhite;
+            font-family: 'Commissioner', sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 50px;
+            font-size: 34px;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        button {
+            display: inline-block;
+            background-color: #1DB954;
+            padding: 10px 24px;
+            border-radius: 100px;
+            text-decoration: none;
+            color: #fff;
+            border: none;
+            outline: none;
+        }
+
+        button:enabled:hover {
+            animation-name: shake;
+            animation-duration: 1s;
+        }
+
+        button:disabled {
+            background-color: grey;
+        }
+
+        button.loading {
+            animation: loading 1s infinite linear;
+        }
+
+        a {
+            display: block;
+            margin: 10px 0;
+            font-size: 20px;
+        }
+
+        @keyframes loading {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(359deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h1 id="status">Failed, please try againn</h1>
-    <button id="button" disabled>Create and add playlist</button>
-    <br>
+    <section class="container">
+        <h1 id="status">Spotify auth: failed, please try againn</h1>
+
+
+        <button id="button" disabled>Create and add playlist</button>
+
+    </section>
+
     <script>
-        const body = document.querySelector("body");
+        const body = document.querySelector(".container");
         const statusHeader = document.getElementById("status");
         const button = document.getElementById("button");
 
         const token = window.location.hash.substr(1).split('&')[0].split('=')[1];
 
         if (token) {
-            statusHeader.innerText = "Success";
+            statusHeader.innerText = "Spotify auth: success";
             button.disabled = false;
         }
 
-        button.onclick = () => {
-            fetch(`/create_playlist?token=${token}`)
-                .then(response => response.json())
-                .then(response => {
-                    if (response.success) {
-                        alert("everything alright");
-                        button.disabled = true;
+        button.onclick = async () => {
+            try {
 
-                        // Return home link
-                        const returnHomeLink = document.createElement('a');
-                        returnHomeLink.innerText = "Playlist";
-                        returnHomeLink.href = response.targetPlaylistUrl;
+                button.classList.add("loading");
+                button.disabled = true;
 
-                        body.appendChild(returnHomeLink)
-                    } else
-                        alert("an error ocurred")
-                })
-                .catch(err => console.log("an error ocurred", err));
+                const jsonResponse = await fetch(`/create_playlist?token=${token}`);
+                const response = await jsonResponse.json();
+
+                button.classList.remove("loading");
+
+                if (!response.success)
+                    throw new Error("something went wrong");
+
+                alert("everything alright");
+
+                // Playlist link
+                const returnHomeLink = document.createElement('a');
+                returnHomeLink.innerText = "Playlist";
+                returnHomeLink.href = response.targetPlaylistUrl;
+                body.appendChild(returnHomeLink)
+            } catch (error) {
+                button.classList.remove("loading");
+                button.disabled = false;
+
+                alert("an error ocurred")
+                console.log("an error ocurred", error);
+            }
+
         }
     </script>
 </body>
